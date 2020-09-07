@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <variable
+            name="product"
+            type="com.example.lafiores.model.product.Product" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        card_view:cardCornerRadius="4dp"
+        card_view:cardElevation="4dp"
+        card_view:cardUseCompatPadding="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="4dp">
+
+            <ImageView
+                android:id="@+id/listProductItemImageView"
+                android:layout_width="wrap_content"
+                android:layout_height="250dp"
+                android:scaleType="fitCenter"
+                bind:mainImagePath="@{product.images}" />
+
+            <TextView
+                android:id="@+id/listProductItemTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/listProductItemImageView"
+                android:layout_marginTop="8dp"
+                android:text="@{product.name}"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
+                android:textStyle="italic" />
+
+
+            <TextView
+                android:id="@+id/listProductItemPrice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/listProductItemTitle"
+                android:layout_marginTop="8dp"
+                android:text="@{product.price}"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

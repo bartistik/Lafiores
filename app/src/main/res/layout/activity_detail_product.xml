@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/white" >
+
+
+        <ImageView
+            android:id="@+id/imageProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="350dp"
+            android:layout_centerHorizontal="true"/>
+
+
+        <TextView
+            android:id="@+id/titleProductTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Загружаем"
+            android:textColor="@android:color/black"
+            android:textSize="20sp"
+            android:textStyle="italic"
+            android:layout_below="@id/imageProduct"
+            android:paddingTop="20dp"
+            android:paddingLeft="20dp"
+            android:paddingBottom="40dp"/>
+
+        <TextView
+            android:id="@+id/priceProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleProductTextView"
+            android:paddingLeft="40dp"
+            android:text="Загружаем"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp" />
+
+        <TextView
+            android:id="@+id/oldPrice"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/titleProductTextView"
+            android:layout_alignRight="@id/priceProduct"
+            android:layout_alignParentRight="true"
+            android:paddingEnd="40dp"
+            android:text="Загружаем"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="10dp"/>
+
+        <Button
+            android:id="@+id/buyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/priceProduct"
+            android:layout_centerHorizontal="true"
+            android:text="Купить"
+            style="@style/Widget.MaterialComponents.Button" />
+
+        <TextView
+            android:id="@+id/descriptionProductTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buyButton"
+            android:layout_margin="20dp"
+            android:text="TextView"/>
+
+
+    </RelativeLayout>
+</ScrollView>
