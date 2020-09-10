@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,12 +18,9 @@ import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.viewmodel.MainActivityViewModel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity {
 
-    private ArrayList<Product> productsList;
+    private PagedList<Product> productsList;
     private RecyclerView recyclerView;
     private ListProductAdapter adapter;
     private MainActivityViewModel mainActivityViewModel;
@@ -41,18 +39,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getListProducts() {
-        mainActivityViewModel.getAllProductData().observe(this, new Observer<List<Product>>() {
+//        mainActivityViewModel.getAllProductData().observe(this, new Observer<List<Product>>() {
+//            @Override
+//            public void onChanged(List<Product> products) {
+//                productsList = (ArrayList<Product>) products;
+//                fillProductsRecyclerView();
+//            }
+//        });
+        mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
             @Override
-            public void onChanged(List<Product> products) {
-                productsList = (ArrayList<Product>) products;
+            public void onChanged(PagedList<Product> productsPageList) {
+
+                productsList = productsPageList;
                 fillProductsRecyclerView();
+
             }
         });
     }
 
     private void fillProductsRecyclerView() {
         recyclerView = activityMainBinding.categoryRecycleView;
-        adapter = new ListProductAdapter(this, productsList);
+        adapter = new ListProductAdapter(this);
+        adapter.submitList(productsList);
         if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT) {
 
