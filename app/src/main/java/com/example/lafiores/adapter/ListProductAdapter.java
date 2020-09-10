@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lafiores.R;
@@ -16,17 +17,16 @@ import com.example.lafiores.databinding.ListProductItemBinding;
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.view.DetailProductActivity;
 
-import java.util.ArrayList;
-
-public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.ListProductViewHolder> {
+public class ListProductAdapter extends PagedListAdapter<Product, ListProductAdapter.ListProductViewHolder> {
 
     private Context context;
-    private ArrayList<Product> products = new ArrayList<Product>();
+//    private ArrayList<Product> products = new ArrayList<Product>();
     private Application application;
 
-    public ListProductAdapter(Context context, ArrayList<Product> products) {
+    public ListProductAdapter(Context context) {
+        super(Product.CALLBACK);
         this.context = context;
-        this.products = products;
+//        this.products = products;
     }
 
     @NonNull
@@ -42,13 +42,13 @@ public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.
         return new ListProductViewHolder(listProductItemBinding);
     }
 
-    public ListProductAdapter(Application application) {
-        this.application = application;
-    }
+//    public ListProductAdapter(Application application) {
+//        this.application = application;
+//    }
 
     @Override
     public void onBindViewHolder(@NonNull ListProductViewHolder holder, int position) {
-        Product product = products.get(position);
+        Product product = getItem(position);
         holder.listProductItemBinding.setProduct(product);
 
 //        String imagePath = products.get(position).getImages().get(0).getSrc();
@@ -58,10 +58,10 @@ public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.
 
     }
 
-    @Override
-    public int getItemCount() {
-        return products.size();
-    }
+//    @Override
+//    public int getItemCount() {
+//        return products.size();
+//    }
 
 
     class ListProductViewHolder extends RecyclerView.ViewHolder {
@@ -76,14 +76,21 @@ public class ListProductAdapter extends RecyclerView.Adapter<ListProductAdapter.
             listProductItemBinding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, DetailProductActivity.class);
-                    intent.putExtra("idProduct", products.get(getAdapterPosition()).getId());
-                    intent.putExtra("imageProduct", products.get(getAdapterPosition()).getImages().get(0).getSrc());
-                    intent.putExtra("titleProduct", products.get(getAdapterPosition()).getName());
-                    intent.putExtra("priceProduct", products.get(getAdapterPosition()).getPrice());
-                    intent.putExtra("oldPriceProduct", products.get(getAdapterPosition()).getSalePrice());
-                    intent.putExtra("descriptionProduct", products.get(getAdapterPosition()).getDescription());
-                    itemView.getContext().startActivity(intent);
+
+                    int position = getAdapterPosition();
+
+                    if(position != RecyclerView.NO_POSITION) {
+                        Product product = getItem(position);
+                        Intent intent = new Intent(context, DetailProductActivity.class);
+                        intent.putExtra("idProduct", product.getId());
+                        intent.putExtra("imageProduct", product.getImages().get(0).getSrc());
+                        intent.putExtra("titleProduct", product.getName());
+                        intent.putExtra("priceProduct", product.getPrice());
+                        intent.putExtra("oldPriceProduct", product.getSalePrice());
+                        intent.putExtra("descriptionProduct", product.getDescription());
+                        itemView.getContext().startActivity(intent);
+                    }
+
                 }
             });
         }
