@@ -1,14 +1,8 @@
 package com.example.lafiores.model.product;
 
 import android.app.Application;
+import android.util.Log;
 
-<<<<<<< HEAD
-import com.example.lafiores.service.ProductApiService;
-
-import androidx.annotation.NonNull;
-import androidx.paging.PageKeyedDataSource;
-
-=======
 import androidx.annotation.NonNull;
 import androidx.paging.PageKeyedDataSource;
 
@@ -23,16 +17,10 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
->>>>>>> 3144cd05da80e58800eea7295886e067836ae4da
 public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
     private ProductApiService productApiService;
     private Application application;
-<<<<<<< HEAD
-    @Override
-    public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Product> callback) {
-
-=======
     private ArrayList<Product> products = new ArrayList<>();
 
     public ProductDataSource(ProductApiService productApiService, Application application) {
@@ -40,32 +28,39 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
         this.application = application;
     }
 
+    int page = 1;
+
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Product> callback) {
+
 
         productApiService = RetrofitInstance.getService();
         Call<List<Product>> call = productApiService.getAllProductsWithPaging(1,
                 application.getApplicationContext().getString(R.string.consumer_key),
-                application.getApplicationContext().getString(R.string.consumer_secret));
+                application.getApplicationContext().getString(R.string.consumer_secret),
+                "ru");
+        // Log.d(LoadData:)
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = (ArrayList<Product>) response.body();
 
-                if (products != null && products.isEmpty()) {
-                    callback.onResult(products, null, 1);
+                if (products != null) {
+                    callback.onResult(products, 1, 2);
+                } else {
+                    Log.d("LoadData: " + getClass().getName(), "неудача");
+
                 }
 
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                Log.d("LoadData: " + getClass().getSimpleName(), t.getLocalizedMessage().toString());
             }
         });
 
->>>>>>> 3144cd05da80e58800eea7295886e067836ae4da
     }
 
     @Override
@@ -74,24 +69,21 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
     }
 
     @Override
-<<<<<<< HEAD
-    public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Product> callback) {
-
-    }
-=======
     public void loadAfter(@NonNull LoadParams<Integer> params, @NonNull final LoadCallback<Integer, Product> callback) {
         productApiService = RetrofitInstance.getService();
-        Call<List<Product>> call = productApiService.getAllProductsWithPaging(1,
+        Call<List<Product>> call = productApiService.getAllProductsWithPaging(params.key,
                 application.getApplicationContext().getString(R.string.consumer_key),
-                application.getApplicationContext().getString(R.string.consumer_secret));
+                application.getApplicationContext().getString(R.string.consumer_secret),
+                "ru");
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = (ArrayList<Product>) response.body();
 
-                if (products != null && products.isEmpty()) {
+                if (products != null) {
                     callback.onResult(products, params.key + 1);
+                    Log.d("LoadData:", "" + params.key);
                 }
 
             }
@@ -104,5 +96,4 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
     }
 
->>>>>>> 3144cd05da80e58800eea7295886e067836ae4da
 }

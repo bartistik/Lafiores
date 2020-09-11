@@ -78,46 +78,4 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
     }
-
-//    private void loadProducts() {
-//        ProductApiService productApiService = RetrofitInstance.getService();
-//
-//        Call<List<Product>> call = productApiService.getAllProducts(
-//                "ck_085bf7135759feb1c3b22a57531e537369dc1ecb",
-//                "cs_d129ae26ab7c1f29ed5416efbdacc2459a5c60fd",
-//                "ru"
-//        );
-//
-//        call.enqueue(new Callback<List<Product>>() {
-//
-//            @Override
-//            public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
-//                if (response.isSuccessful()) {
-//
-//                    ArrayList<Product> productApiResponse =
-//                            (ArrayList<Product>) response.body();
-//                    Log.d("TEEST", "загружено " );
-//                    fillRecyclerView(productApiResponse);
-//                } else {
-//
-//
-//                }
-//            }
-//
-//            @Override
-//            public void onFailure(Call<List<Product>> call, Throwable t) {
-//                Log.d("TEEST", "не загружено");
-//            }
-//        });
-//    }
-//
-//    private void fillRecyclerView(ArrayList<Product> productApiResponse) {
-//        adapter = new ListProductAdapter(getApplicationContext(), productApiResponse);
-//        recyclerView.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
-//        recyclerView.setAdapter(adapter);
-////        recyclerView.setItemAnimator(new DefaultItemAnimator());
-////        recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
-////        recyclerView.setAdapter(adapter);
-////        adapter.notifyDataSetChanged();
-//    }
 }

@@ -1,5 +1,7 @@
 package com.example.lafiores.service;
 
+import android.util.Log;
+
 import com.example.lafiores.model.product.Product;
 
 import java.util.List;
@@ -29,7 +31,7 @@ public interface ProductApiService {
     Call<List<Product>> getAllProductsWithPaging(
             @Query("page") int page,
             @Query("consumer_key") String consumerKey,
-            @Query("consumer_secret") String consumerSecret);
-
+            @Query("consumer_secret") String consumerSecret,
+            @Query("lang") String lang);
 }
 

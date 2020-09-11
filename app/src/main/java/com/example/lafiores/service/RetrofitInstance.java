@@ -9,12 +9,11 @@ public class RetrofitInstance {
     public static String BASE_URL = "https://lafiores.com.ua/";
 
     public static ProductApiService getService() {
-        if(retrofit == null) {
+        if (retrofit == null) {
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory
-                            .create())
+                    .addConverterFactory(GsonConverterFactory.create())
                     .build();
         }
         return retrofit.create(ProductApiService.class);

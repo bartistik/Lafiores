@@ -36,8 +36,9 @@ public class MainActivityViewModel extends AndroidViewModel {
 
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
+                .setEnablePlaceholders(true)
                 .setPageSize(20)
-                .setPrefetchDistance(3)
+                .setPrefetchDistance(2)
                 .build();
 
         executor = Executors.newCachedThreadPool();
