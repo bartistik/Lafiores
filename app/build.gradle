@@ -61,4 +61,6 @@ dependencies {
     //Paging Library
     def paging_version = "2.1.2"
     implementation "androidx.paging:paging-runtime:$paging_version"
+
+    compile 'com.wang.avi:library:2.1.3'
 }

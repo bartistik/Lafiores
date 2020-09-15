@@ -40,12 +40,10 @@ public class ProductRepository {
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = (ArrayList<Product>) response.body();
                 mutableLiveData.setValue(products);
-                Log.d("TEEST", "загружено ");
             }
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("TEEST", "не загружено");
             }
         });
         return mutableLiveData;

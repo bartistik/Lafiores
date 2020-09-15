@@ -2,7 +2,11 @@ package com.example.lafiores.view;
 
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -16,13 +20,17 @@ import com.example.lafiores.R;
 import com.example.lafiores.adapter.ListProductAdapter;
 import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.model.product.Product;
+import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.viewmodel.MainActivityViewModel;
+
+import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {
 
     private PagedList<Product> productsList;
     private RecyclerView recyclerView;
     private ListProductAdapter adapter;
+    private ProgressBar progressBar;
     private MainActivityViewModel mainActivityViewModel;
     private ActivityMainBinding activityMainBinding;
 
@@ -39,23 +47,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getListProducts() {
-//        mainActivityViewModel.getAllProductData().observe(this, new Observer<List<Product>>() {
-//            @Override
-//            public void onChanged(List<Product> products) {
-//                productsList = (ArrayList<Product>) products;
-//                fillProductsRecyclerView();
-//            }
-//        });
+
         mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
             @Override
             public void onChanged(PagedList<Product> productsPageList) {
 
                 productsList = productsPageList;
                 fillProductsRecyclerView();
-
             }
         });
     }
+
 
     private void fillProductsRecyclerView() {
         recyclerView = activityMainBinding.categoryRecycleView;
@@ -75,7 +77,19 @@ public class MainActivity extends AppCompatActivity {
         }
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
+
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
+        //Проверка загрузки данных. Loaded - скрыть progressBar. Loading - показать progressBar
+        mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
+            if(Objects.requireNonNull(status).equalsIgnoreCase("Loaded")) {
+                activityMainBinding.loadingIndicator.setVisibility(View.GONE);
+                Log.d("ProgressBar", Objects.requireNonNull(status).toString());
+            } else if (status.equalsIgnoreCase("Loading")) {
+                Log.d("ProgressBar", Objects.requireNonNull(status).toString());
+                activityMainBinding.loadingIndicator.setVisibility(View.VISIBLE);
+            }
+        });
     }
 }

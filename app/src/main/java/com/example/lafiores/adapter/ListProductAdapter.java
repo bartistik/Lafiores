@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -48,8 +49,13 @@ public class ListProductAdapter extends PagedListAdapter<Product, ListProductAda
 
     @Override
     public void onBindViewHolder(@NonNull ListProductViewHolder holder, int position) {
+
+
         Product product = getItem(position);
-        holder.listProductItemBinding.setProduct(product);
+
+            holder.listProductItemBinding.setProduct(product);
+
+
 
 //        String imagePath = products.get(position).getImages().get(0).getSrc();
 //        String imagePath  = product.getImages().get(0).getSrc();

@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
@@ -26,6 +27,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private LiveData<ProductDataSource> productDataSourceLiveData;
     private Executor executor;
     private LiveData<PagedList<Product>> pagedListLiveData;
+    private LiveData<String> progressLoadStatus = new MutableLiveData<>();
 
     public MainActivityViewModel(@NonNull Application application) {
         super(application);
@@ -37,14 +39,20 @@ public class MainActivityViewModel extends AndroidViewModel {
         PagedList.Config config = new PagedList.Config.Builder()
                 .setInitialLoadSizeHint(10)
                 .setEnablePlaceholders(true)
-                .setPageSize(20)
-                .setPrefetchDistance(2)
+                .setPageSize(10)
+                .setPrefetchDistance(5)
                 .build();
 
         executor = Executors.newCachedThreadPool();
         pagedListLiveData = new LivePagedListBuilder<Integer, Product>(productDataSourceFactory, config)
                 .setFetchExecutor(executor)
                 .build();
+        progressLoadStatus = Transformations.switchMap(productDataSourceFactory.getMutableLiveData(),
+                ProductDataSource::getProgressLiveStatus);
+    }
+
+    public LiveData<String> getProgressLoadStatus() {
+        return progressLoadStatus;
     }
 
     public MutableLiveData<List<Product>> getAllProductData() {

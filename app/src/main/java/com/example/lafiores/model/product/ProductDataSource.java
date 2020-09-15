@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import com.example.lafiores.R;
@@ -22,13 +23,17 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
     private ProductApiService productApiService;
     private Application application;
     private ArrayList<Product> products = new ArrayList<>();
+    private MutableLiveData<String> progressLiveStatus;
 
     public ProductDataSource(ProductApiService productApiService, Application application) {
         this.productApiService = productApiService;
         this.application = application;
+        progressLiveStatus = new MutableLiveData<>();
     }
 
-    int page = 1;
+    public MutableLiveData<String> getProgressLiveStatus() {
+        return progressLiveStatus;
+    }
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Product> callback) {
@@ -39,7 +44,6 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 application.getApplicationContext().getString(R.string.consumer_key),
                 application.getApplicationContext().getString(R.string.consumer_secret),
                 "ru");
-        // Log.d(LoadData:)
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -47,8 +51,10 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 products = (ArrayList<Product>) response.body();
 
                 if (products != null) {
-                    callback.onResult(products, 1, 2);
+                    progressLiveStatus.postValue("Loaded");
+                    callback.onResult(products, null, 2);
                 } else {
+                    progressLiveStatus.postValue("Loading");
                     Log.d("LoadData: " + getClass().getName(), "неудача");
 
                 }
@@ -65,6 +71,7 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Product> callback) {
+        callback.onResult(products, params.key - 1);
 
     }
 
@@ -75,15 +82,17 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 application.getApplicationContext().getString(R.string.consumer_key),
                 application.getApplicationContext().getString(R.string.consumer_secret),
                 "ru");
-
+        progressLiveStatus.postValue("Loading");
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = (ArrayList<Product>) response.body();
 
                 if (products != null) {
+                    progressLiveStatus.postValue("Loaded");
                     callback.onResult(products, params.key + 1);
-                    Log.d("LoadData:", "" + params.key);
+                } else {
+
                 }
 
             }
