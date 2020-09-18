@@ -7,57 +7,121 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lafiores.R;
+import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.databinding.ListProductItemBinding;
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.view.DetailProductActivity;
+import com.example.lafiores.view.MainActivity;
+import com.example.lafiores.viewmodel.MainActivityViewModel;
+
+import java.util.ArrayList;
+import java.util.Objects;
 
 public class ListProductAdapter extends PagedListAdapter<Product, ListProductAdapter.ListProductViewHolder> {
 
     private Context context;
-    //    private ArrayList<Product> products = new ArrayList<Product>();
     private Application application;
-    ListProductItemBinding listProductItemBinding;
+    private static final int TYPE_FOOTER = 0;
+    private static final int TYPE_ITEM = 1;
+    private ArrayList<Product> productArrayList;
 
     public ListProductAdapter(Context context) {
         super(Product.CALLBACK);
         this.context = context;
-//        this.products = products;
+        this.productArrayList = productArrayList;
     }
 
     @NonNull
     @Override
     public ListProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        Log.d("Adapter:", viewType + "");
-        if(viewType == 2) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar,
-                    parent,
-                    false);
-            return view;
-        } else if(viewType ==1) {
-        listProductItemBinding = DataBindingUtil.inflate(
-                LayoutInflater.from(parent.getContext()),
-                R.layout.list_product_item,
-                parent,
-                false);
+        ListProductItemBinding listProductItemBinding;
+        Log.d("ProgressBarVIEWTYPE", viewType + "");
 
-        return new ListProductViewHolder(listProductItemBinding);
-    }
-        return new ListProductViewHolder(listProductItemBinding);
-    }
+                listProductItemBinding = DataBindingUtil.inflate(
+                        LayoutInflater.from(parent.getContext()),
+                        R.layout.list_product_item,
+                        parent,
+                        false);
+                return new ListProductViewHolder(listProductItemBinding);
+ }
+
+//        switch (viewType) {
+//            case 0:
+//                i = R.layout.progress_bar;
+//            case 1:
+//                i = R.layout.list_product_item;
+//            case 2:
+//                i = R.layout.progress_bar;
+//            default:
+//                i = R.layout.list_product_item;
+//                Log.d("ProgressBarI", i + "");
+//                listProductItemBinding = DataBindingUtil.inflate(
+//                        LayoutInflater.from(parent.getContext()),
+//                        i,
+//                        parent,
+//                        false);
+//                return new ListProductViewHolder(listProductItemBinding);
+//        Log.d("ProgressBarI", i + "");
+//        listProductItemBinding = DataBindingUtil.inflate(
+//                LayoutInflater.from(parent.getContext()),
+//                i,
+//                parent,
+//                false);
+//        return new ListProductViewHolder(listProductItemBinding);
+
+//        switch (viewType) {
+//            case 1:
+//                listProductItemBinding = DataBindingUtil.inflate(
+//                        LayoutInflater.from(parent.getContext()),
+//                        R.layout.list_product_item,
+//                        parent,
+//                        false);
+//                return new ListProductViewHolder(listProductItemBinding);
+//            case 2:
+//                listProductItemBinding = DataBindingUtil.inflate(
+//                        LayoutInflater.from(parent.getContext()),
+//                        R.layout.progress_bar,
+//                        parent,
+//                        false);
+//                return new ListProductViewHolder(listProductItemBinding);
+//            default:
+//                listProductItemBinding = DataBindingUtil.inflate(
+//                        LayoutInflater.from(parent.getContext()),
+//                        R.layout.list_product_item,
+//                        parent,
+//                        false);
+//                return new ListProductViewHolder(listProductItemBinding);
+//        }
+//        if (viewType == 2) {
+//            View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_product_item, parent, false);
+//        } else {
+//            ListProductItemBinding listProductItemBinding = DataBindingUtil.inflate(
+//                    LayoutInflater.from(parent.getContext()),
+//                    R.layout.list_product_item,
+//                    parent,
+//                    false);
+//
+//            return new ListProductViewHolder(listProductItemBinding);
+//        }
+
 
 //    public ListProductAdapter(Application application) {
 //        this.application = application;
 //    }
 
+
     @Override
     public void onBindViewHolder(@NonNull ListProductViewHolder holder, int position) {
+
 
         Product product = getItem(position);
 

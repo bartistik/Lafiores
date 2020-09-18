@@ -1,11 +1,14 @@
 package com.example.lafiores.view;
 
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -19,7 +22,10 @@ import com.example.lafiores.R;
 import com.example.lafiores.adapter.ListProductAdapter;
 import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.model.product.Product;
+import com.example.lafiores.service.Constant;
+import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.viewmodel.MainActivityViewModel;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Objects;
 
@@ -41,7 +47,6 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
-
         getListProducts();
     }
 
@@ -60,12 +65,13 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillProductsRecyclerView() {
         recyclerView = activityMainBinding.categoryRecycleView;
-
+//        View mProgressBarFooter = ((LayoutInflater)this.getSystemService(Context.LAYOUT_INFLATER_SERVICE))
+//                .inflate(R.layout.progress_bar, null, false);
+//        recyclerView.addView(mProgressBarFooter);
         adapter = new ListProductAdapter(this);
         adapter.submitList(productsList);
         if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT) {
-
             recyclerView.setLayoutManager(
                     new GridLayoutManager(this, 2));
 
@@ -81,16 +87,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
+        //проверяем интернет-соединение
+        if(!Constant.checkNetworkConnection(this)) {
+            Snackbar.make(findViewById(R.id.loadingIndicator), R.string.error_network_connection, Snackbar.LENGTH_LONG)
+                    .show();
+        }
+
         //Проверка загрузки данных. Loaded - скрыть progressBar. Loading - показать progressBar
         mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
             if(Objects.requireNonNull(status).equalsIgnoreCase("Loaded")) {
                 activityMainBinding.loadingIndicator.setVisibility(View.GONE);
-                adapter.onCreateViewHolder(recyclerView,1);
-                Log.d("ProgressBar", Objects.requireNonNull(status).toString());
+                Log.d("ProgressBarSTATUS", Objects.requireNonNull(status).toString());
             } else if (status.equalsIgnoreCase("Loading")) {
-                Log.d("ProgressBar", Objects.requireNonNull(status).toString());
+                Log.d("ProgressBarSTATUS", Objects.requireNonNull(status).toString());
                 activityMainBinding.loadingIndicator.setVisibility(View.VISIBLE);
-                adapter.onCreateViewHolder(recyclerView,2);
             }
         });
     }
