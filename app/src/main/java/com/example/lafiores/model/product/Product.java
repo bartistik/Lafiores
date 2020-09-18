@@ -208,7 +208,7 @@ public class Product extends BaseObservable implements Parcelable {
         Glide
                 .with(imageView)
                 .load(images.get(0).getSrc())
-                .placeholder(R.drawable.ic_launcher_foreground)//вывожу первую картинку
+//                .placeholder(R.drawable.ic_launcher_foreground)//вывожу первую картинку
                 .into(imageView);
     }
 
