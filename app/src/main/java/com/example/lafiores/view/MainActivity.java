@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
@@ -20,7 +19,6 @@ import com.example.lafiores.R;
 import com.example.lafiores.adapter.ListProductAdapter;
 import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.model.product.Product;
-import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.viewmodel.MainActivityViewModel;
 
 import java.util.Objects;
@@ -43,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(MainActivityViewModel.class);
+
         getListProducts();
     }
 
@@ -61,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void fillProductsRecyclerView() {
         recyclerView = activityMainBinding.categoryRecycleView;
+
         adapter = new ListProductAdapter(this);
         adapter.submitList(productsList);
         if (getResources().getConfiguration().orientation ==
@@ -85,10 +85,12 @@ public class MainActivity extends AppCompatActivity {
         mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
             if(Objects.requireNonNull(status).equalsIgnoreCase("Loaded")) {
                 activityMainBinding.loadingIndicator.setVisibility(View.GONE);
+                adapter.onCreateViewHolder(recyclerView,1);
                 Log.d("ProgressBar", Objects.requireNonNull(status).toString());
             } else if (status.equalsIgnoreCase("Loading")) {
                 Log.d("ProgressBar", Objects.requireNonNull(status).toString());
                 activityMainBinding.loadingIndicator.setVisibility(View.VISIBLE);
+                adapter.onCreateViewHolder(recyclerView,2);
             }
         });
     }

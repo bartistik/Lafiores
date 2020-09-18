@@ -3,10 +3,10 @@ package com.example.lafiores.adapter;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.databinding.DataBindingUtil;
@@ -21,8 +21,9 @@ import com.example.lafiores.view.DetailProductActivity;
 public class ListProductAdapter extends PagedListAdapter<Product, ListProductAdapter.ListProductViewHolder> {
 
     private Context context;
-//    private ArrayList<Product> products = new ArrayList<Product>();
+    //    private ArrayList<Product> products = new ArrayList<Product>();
     private Application application;
+    ListProductItemBinding listProductItemBinding;
 
     public ListProductAdapter(Context context) {
         super(Product.CALLBACK);
@@ -33,13 +34,21 @@ public class ListProductAdapter extends PagedListAdapter<Product, ListProductAda
     @NonNull
     @Override
     public ListProductViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-
-        ListProductItemBinding listProductItemBinding = DataBindingUtil.inflate(
+        Log.d("Adapter:", viewType + "");
+        if(viewType == 2) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.progress_bar,
+                    parent,
+                    false);
+            return view;
+        } else if(viewType ==1) {
+        listProductItemBinding = DataBindingUtil.inflate(
                 LayoutInflater.from(parent.getContext()),
                 R.layout.list_product_item,
                 parent,
                 false);
 
+        return new ListProductViewHolder(listProductItemBinding);
+    }
         return new ListProductViewHolder(listProductItemBinding);
     }
 
@@ -50,11 +59,9 @@ public class ListProductAdapter extends PagedListAdapter<Product, ListProductAda
     @Override
     public void onBindViewHolder(@NonNull ListProductViewHolder holder, int position) {
 
-
         Product product = getItem(position);
 
-            holder.listProductItemBinding.setProduct(product);
-
+        holder.listProductItemBinding.setProduct(product);
 
 
 //        String imagePath = products.get(position).getImages().get(0).getSrc();
@@ -85,7 +92,7 @@ public class ListProductAdapter extends PagedListAdapter<Product, ListProductAda
 
                     int position = getAdapterPosition();
 
-                    if(position != RecyclerView.NO_POSITION) {
+                    if (position != RecyclerView.NO_POSITION) {
                         Product product = getItem(position);
                         Intent intent = new Intent(context, DetailProductActivity.class);
                         intent.putExtra("idProduct", product.getId());

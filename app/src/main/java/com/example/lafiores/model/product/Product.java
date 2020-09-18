@@ -12,7 +12,6 @@ import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.DiffUtil;
 
 import com.bumptech.glide.Glide;
-import com.example.lafiores.R;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -208,7 +207,7 @@ public class Product extends BaseObservable implements Parcelable {
         Glide
                 .with(imageView)
                 .load(images.get(0).getSrc())
-                .placeholder(R.drawable.ic_launcher_foreground)//вывожу первую картинку
+//                .placeholder(R.mipmap.ic_launcher_foreground)//вывожу первую картинку
                 .into(imageView);
     }
 
