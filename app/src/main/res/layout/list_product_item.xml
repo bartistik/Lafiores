@@ -11,21 +11,22 @@
     </data>
 
     <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
+        card_view:cardCornerRadius="2dp"
+        card_view:cardElevation="1dp"
         card_view:cardUseCompatPadding="true">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="4dp">
+            android:padding="2dp">
 
             <ImageView
                 android:id="@+id/listProductItemImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="250dp"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
                 android:scaleType="fitCenter"
                 bind:mainImagePath="@{product.images}" />
 
@@ -34,22 +35,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/listProductItemImageView"
-                android:layout_marginTop="8dp"
+                android:fontFamily="@font/montserrat"
+                android:layout_margin="4dp"
                 android:text="@{product.name}"
                 android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:textStyle="italic" />
+                android:textSize="18sp" />
+
+            <Button
+                android:id="@+id/buyButton"
+                style="@style/Widget.MaterialComponents.Button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_below="@id/listProductItemTitle"
+                android:layout_alignParentStart="true"
+                android:textStyle="bold"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/buyButton" />
 
 
             <TextView
                 android:id="@+id/listProductItemPrice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@id/listProductItemTitle"
-                android:layout_marginTop="8dp"
+                android:layout_toRightOf="@id/buyButton"
+                android:fontFamily="@font/montserrat"
                 android:text="@{product.price}"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textColor="@android:color/black"
+                android:textSize="18sp"
+                android:layout_marginTop="16dp"
+                android:textStyle="bold"/>
 
         </RelativeLayout>
     </androidx.cardview.widget.CardView>

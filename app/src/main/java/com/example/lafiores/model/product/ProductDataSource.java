@@ -8,6 +8,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import com.example.lafiores.R;
+import com.example.lafiores.service.Constant;
 import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
 
@@ -38,12 +39,12 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Product> callback) {
 
-
+        progressLiveStatus.postValue(Constant.STATE_DATA_START_LOADING);
         productApiService = RetrofitInstance.getService();
         Call<List<Product>> call = productApiService.getAllProductsWithPaging(1,
                 application.getApplicationContext().getString(R.string.consumer_key),
                 application.getApplicationContext().getString(R.string.consumer_secret),
-                "ru");
+                application.getApplicationContext().getString(R.string.lang));
 
         call.enqueue(new Callback<List<Product>>() {
             @Override
@@ -51,11 +52,11 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 products = (ArrayList<Product>) response.body();
 
                 if (products != null) {
-                    progressLiveStatus.postValue("Loaded");
                     callback.onResult(products, null, 2);
+                    progressLiveStatus.postValue(Constant.STATE_DATA_LOADED);
                 } else {
-                    progressLiveStatus.postValue("Loading");
-                    Log.d("LoadData: " + getClass().getName(), "неудача");
+                    progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
+                    Log.d("Products", " null");
 
                 }
 
@@ -63,7 +64,8 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-                Log.d("LoadData: " + getClass().getSimpleName(), t.getLocalizedMessage().toString());
+                progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
+                Log.d("ProgressLiveStatus: ", t.toString());
             }
         });
 
@@ -81,15 +83,15 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
         Call<List<Product>> call = productApiService.getAllProductsWithPaging(params.key,
                 application.getApplicationContext().getString(R.string.consumer_key),
                 application.getApplicationContext().getString(R.string.consumer_secret),
-                "ru");
-        progressLiveStatus.postValue("Loading");
+                application.getApplicationContext().getString(R.string.lang));
+        progressLiveStatus.postValue(Constant.STATE_DATA_LOADING);
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
                 products = (ArrayList<Product>) response.body();
 
                 if (products != null) {
-                    progressLiveStatus.postValue("Loaded");
+                    progressLiveStatus.postValue(Constant.STATE_DATA_LOADED);
                     callback.onResult(products, params.key + 1);
                 } else {
 
@@ -99,7 +101,8 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
-
+                progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
+                Log.d("ProgressLiveStatus: ", t.toString());
             }
         });
 

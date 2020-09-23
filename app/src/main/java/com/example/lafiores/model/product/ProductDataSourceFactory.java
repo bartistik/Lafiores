@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
+import com.example.lafiores.db.ProductDao;
 import com.example.lafiores.service.ProductApiService;
 
 public class ProductDataSourceFactory extends DataSource.Factory {
@@ -19,6 +20,10 @@ public class ProductDataSourceFactory extends DataSource.Factory {
         this.application = application;
         this.productApiService = productApiService;
         this.mutableLiveData = new MutableLiveData<>();
+    }
+
+    public ProductDataSourceFactory(ProductDao productDao) {
+
     }
 
     @NonNull

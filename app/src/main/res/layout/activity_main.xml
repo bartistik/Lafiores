@@ -1,33 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:htext="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <RelativeLayout
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="buttonHandler"
+            type="com.example.lafiores.view.ListProductActivity.ListProductClickHandlers" />
+    </data>
+
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white"
-        android:orientation="vertical"
-        tools:context=".view.MainActivity">
+        tools:openDrawer="start"
+        android:fitsSystemWindows="true">
 
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/categoryRecycleView"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            tools:context=".view.ListProductActivity">
 
-        <com.wang.avi.AVLoadingIndicatorView
-            android:id="@+id/loadingIndicator"
-            style="@style/AVLoadingIndicatorView.Small"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:layout_gravity="center_horizontal"
-            app:indicatorColor="@color/colorAccent"
-            app:indicatorName="BallPulseIndicator" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/categoryRecycleView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="?android:actionBarSize"/>
 
-    </RelativeLayout>
+            <Button
+                android:id="@+id/errorConnectionRestartButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@id/loadingIndicator"
+                android:layout_centerHorizontal="true"
+                android:onClick="@{buttonHandler::errConnectionRestartButtonClicked}"
+                android:text="@string/error_network_connection_restart_button"
+                android:visibility="gone" />
 
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/loadingIndicator"
+                style="@style/AVLoadingIndicatorView.Small"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:layout_gravity="center_horizontal"
+                android:visibility="gone"
+                app:indicatorColor="@color/colorCpa"
+                app:indicatorName="BallPulseIndicator" />
 
+            <com.wang.avi.AVLoadingIndicatorView
+                android:id="@+id/downloadProductsLoadingIndicator"
+                style="@style/AVLoadingIndicatorView.Large"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_centerInParent="true"
+                app:indicatorColor="@color/colorCpa"
+                app:indicatorName="BallPulseIndicator" />
+
+            <in.codeshuffle.typewriterview.TypeWriterView
+                android:id="@+id/downloadProductTextView"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/downloadProductsLoadingIndicator"
+                android:layout_centerInParent="true"
+                android:fontFamily="@font/montserrat"
+                android:text="@string/downloadProducts"
+                android:textSize="14sp" />
+
+            <include layout="@layout/toolbar"/>
+        </RelativeLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigationView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            android:layout_gravity="start"
+            app:menu="@menu/drawer_menu"
+            app:headerLayout="@layout/header_drawer_menu"/>
+</androidx.drawerlayout.widget.DrawerLayout>
 </layout>

@@ -4,12 +4,15 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.example.lafiores.R;
-
 
 public class Constant {
-    //почему-то нельзя
-    //public final static String CHECK_NETWORK_ERROR = getString(R.string.error_network_connection);
+
+
+    public static final String STATE_DATA_START_LOADING = "Start Loading";
+    public static final String STATE_DATA_LOADING = "Loading";
+    public static final String STATE_DATA_LOADED = "Loaded";
+    public static final String STATE_DATA_ERROR = "Error";
+
     //проверяем интернет-соединение
     public static boolean checkNetworkConnection(Context context) {
         ConnectivityManager connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -25,4 +28,5 @@ public class Constant {
         }
         return false;
     }
+
 }

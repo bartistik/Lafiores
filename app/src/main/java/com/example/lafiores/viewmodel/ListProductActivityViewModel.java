@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-public class MainActivityViewModel extends AndroidViewModel {
+public class ListProductActivityViewModel extends AndroidViewModel {
 
     ProductRepository productRepository;
     private LiveData<ProductDataSource> productDataSourceLiveData;
@@ -29,7 +29,7 @@ public class MainActivityViewModel extends AndroidViewModel {
     private LiveData<PagedList<Product>> pagedListLiveData;
     private LiveData<String> progressLoadStatus = new MutableLiveData<>();
 
-    public MainActivityViewModel(@NonNull Application application) {
+    public ListProductActivityViewModel(@NonNull Application application) {
         super(application);
         productRepository = new ProductRepository(application);
         ProductApiService productApiService = RetrofitInstance.getService();

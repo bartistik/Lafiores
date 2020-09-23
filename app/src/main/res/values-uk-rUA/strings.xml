@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="buyButton">Купити</string>
+    <string name="downloadProducts">Завантажуємо товари...</string>
+    <string name="error_network_connection_restart_button">Оновити</string>
+    <string name="error_network_connection">Немає з\'єднання! Перевірте інтернет-з\'єднання!</string>
+    <string name="lang">uk</string>
+    <string name="login_button">Войти</string>
+    <string name="your_password">Ваш пароль</string>
+    <string name="your_email">Ваш Email</string>
+    <string name="email_edit_text__empty_error">Введіть email</string>
+    <string name="email_edit_text_error">Неправильный email!</string>
+    <string name="password_edit_text_empty_error">Введите пароль!</string>
+    <string name="password_edit_text_short_error">Короткий пароль!</string>
+    <string name="password_edit_text_long_error">Слишком длинный пароль</string>
+    <string name="email_edit_text_long_error">Слишком длинный email</string>
+    <string name="email_edit_text_short_error">Короткий email</string>
+    <string name="create_user_error">Помилка реєстрації</string>
+    <string name="welcome_auth">Авторизація</string>
+    <string name="your_password_confirm">Підтвердіть пароль</string>
+    <string name="switch_auth_register">Реєстрація</string>
+    <string name="switch_to_register">Зареєструватися</string>
+    <string name="switch_to_auth">Вже зареєстровані</string>
+    <string name="email_edit_text_empty_error">Введіть email</string>
+    <string name="register_button">Регистрация</string>
+    <string name="password_edit_text_not_match_error">Пароли не совпадают!</string>
+    <string name="sign_out">Выйти</string>
+</resources>

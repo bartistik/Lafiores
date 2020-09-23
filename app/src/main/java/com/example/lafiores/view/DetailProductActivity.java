@@ -5,28 +5,33 @@ import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.bumptech.glide.Glide;
+import com.daimajia.slider.library.SliderLayout;
+import com.daimajia.slider.library.SliderTypes.BaseSliderView;
+import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
+import com.daimajia.slider.library.Tricks.ViewPagerEx;
 import com.example.lafiores.R;
+import com.example.lafiores.model.product.Image;
 
-public class DetailProductActivity extends AppCompatActivity {
+import java.util.ArrayList;
 
-    ImageView mainImageproductImageView;
+public class DetailProductActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+
     TextView titleProductTextView;
     TextView priceProcuctTextView;
     TextView oldPriceTextView;
     TextView descriptionProductTextView;
     Button buyButton;
+    private SliderLayout mDemoSlider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail_product);
-        mainImageproductImageView = findViewById(R.id.imageProduct);
+        mDemoSlider = findViewById(R.id.sliderLayout);
         titleProductTextView = findViewById(R.id.titleProductTextView);
         priceProcuctTextView = findViewById(R.id.priceProduct);
         oldPriceTextView = findViewById(R.id.oldPrice);
@@ -35,19 +40,39 @@ public class DetailProductActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         int id = intent.getIntExtra("idProduct", 0);
-        Glide.with(this).load(intent.getStringExtra("imageProduct")).into(mainImageproductImageView);
+        ArrayList<Image> images = (ArrayList<Image>) intent.getSerializableExtra("imageProduct");
+        //Слайдер картинок
+        for (int i = 0; i < images.size(); i++) {
+
+            DefaultSliderView defaultSliderView = new DefaultSliderView(this);
+            defaultSliderView
+                    .image(images.get(i).getSrc())
+                    .setScaleType(BaseSliderView.ScaleType.Fit)
+                    .setOnSliderClickListener(this);
+            defaultSliderView.bundle(new Bundle());
+            defaultSliderView.getBundle()
+                    .putString("extra", images.get(i).getName());
+            mDemoSlider.addSlider(defaultSliderView);
+        }
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Background2Foreground);
+        mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
+
+
         titleProductTextView.setText(intent.getStringExtra("titleProduct"));
+        setTitle(intent.getStringExtra("titleProduct"));
+
         priceProcuctTextView.setText(intent.getStringExtra("priceProduct"));
-        if(intent.getStringExtra("oldPriceProduct") != null) {
-                        oldPriceTextView.setText(intent.getStringExtra("oldPriceProduct"));
-                    } else {
-                        oldPriceTextView.setVisibility(View.GONE);
-                    }
+        if (intent.getStringExtra("oldPriceProduct") != null) {
+            oldPriceTextView.setText(intent.getStringExtra("oldPriceProduct"));
+        } else {
+            oldPriceTextView.setVisibility(View.GONE);
+        }
         oldPriceTextView.setText(intent.getStringExtra("oldPriceProduct"));
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             descriptionProductTextView.setText(Html.fromHtml(intent.getStringExtra("descriptionProduct"), Html.FROM_HTML_MODE_LEGACY));
-        } else  {
+        } else {
             descriptionProductTextView.setText(Html.fromHtml(intent.getStringExtra("descriptionProduct")));
+            descriptionProductTextView.setMaxLines(5);
 
         }
 //        ProductApiService productApiService = RetrofitInstance.getService();
@@ -87,5 +112,37 @@ public class DetailProductActivity extends AppCompatActivity {
 //
 //            }
 //        });
+    }
+
+    @Override
+    public void onSliderClick(BaseSliderView slider) {
+
+    }
+
+    @Override
+    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+    }
+
+    @Override
+    public void onPageSelected(int position) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int state) {
+
+    }
+
+    @Override
+    protected void onStop() {
+        mDemoSlider.stopAutoCycle();
+        super.onStop();
+    }
+
+    @Override
+    protected void onPause() {
+        mDemoSlider.stopAutoCycle();
+        super.onPause();
     }
 }

@@ -10,17 +10,21 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import com.bumptech.glide.Glide;
-import com.example.lafiores.R;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
-
+@Entity(tableName = "products")
 public class Product extends BaseObservable implements Parcelable {
+
     @SerializedName("id")
     @Expose
+    @PrimaryKey
     private Integer id;
     @SerializedName("name")
     @Expose
@@ -75,15 +79,19 @@ public class Product extends BaseObservable implements Parcelable {
     private String salePrice;
     @SerializedName("date_on_sale_from")
     @Expose
+    @Ignore
     private Object dateOnSaleFrom;
     @SerializedName("date_on_sale_from_gmt")
     @Expose
+    @Ignore
     private Object dateOnSaleFromGmt;
     @SerializedName("date_on_sale_to")
     @Expose
+    @Ignore
     private Object dateOnSaleTo;
     @SerializedName("date_on_sale_to_gmt")
     @Expose
+    @Ignore
     private Object dateOnSaleToGmt;
     @SerializedName("price_html")
     @Expose
@@ -105,6 +113,7 @@ public class Product extends BaseObservable implements Parcelable {
     private Boolean downloadable;
     @SerializedName("downloads")
     @Expose
+    @Ignore
     private List<Object> downloads = null;
     @SerializedName("download_limit")
     @Expose
@@ -129,6 +138,7 @@ public class Product extends BaseObservable implements Parcelable {
     private Boolean manageStock;
     @SerializedName("stock_quantity")
     @Expose
+    @Ignore
     private Object stockQuantity;
     @SerializedName("stock_status")
     @Expose
@@ -150,6 +160,7 @@ public class Product extends BaseObservable implements Parcelable {
     private String weight;
     @SerializedName("dimensions")
     @Expose
+    @Ignore
     private Dimensions dimensions;
     @SerializedName("shipping_required")
     @Expose
@@ -174,12 +185,15 @@ public class Product extends BaseObservable implements Parcelable {
     private Integer ratingCount;
     @SerializedName("related_ids")
     @Expose
+    @Ignore
     private List<Integer> relatedIds = null;
     @SerializedName("upsell_ids")
     @Expose
+    @Ignore
     private List<Object> upsellIds = null;
     @SerializedName("cross_sell_ids")
     @Expose
+    @Ignore
     private List<Object> crossSellIds = null;
     @SerializedName("parent_id")
     @Expose
@@ -189,49 +203,60 @@ public class Product extends BaseObservable implements Parcelable {
     private String purchaseNote;
     @SerializedName("categories")
     @Expose
+    @Ignore
     private List<Category> categories = null;
     @SerializedName("tags")
     @Expose
+    @Ignore
     private List<Object> tags = null;
     @SerializedName("lang")
     @Expose
     private String lang;
     @SerializedName("translations")
     @Expose
+    @Ignore
     private Translations translations;
     @SerializedName("images")
     @Expose
+    @Ignore
     private List<Image> images = null;
 
     @BindingAdapter({"mainImagePath"})
     public static void loadMainImage(ImageView imageView, List<Image> images) {
-        Glide
-                .with(imageView)
-                .load(images.get(0).getSrc())
-//                .placeholder(R.drawable.ic_launcher_foreground)//вывожу первую картинку
-                .into(imageView);
+        if (images != null)
+            Glide
+                    .with(imageView)
+                    .load(images.get(0).getSrc().split(".png")[0] + "-510x510.png")
+//                .placeholder(R.drawable.ic_launcher_foreground)
+                    .into(imageView);
     }
 
     @SerializedName("attributes")
     @Expose
+    @Ignore
     private List<Attribute> attributes = null;
     @SerializedName("default_attributes")
     @Expose
+    @Ignore
     private List<DefaultAttribute> defaultAttributes = null;
     @SerializedName("variations")
     @Expose
+    @Ignore
     private List<Object> variations = null;
     @SerializedName("grouped_products")
     @Expose
+    @Ignore
     private List<Object> groupedProducts = null;
     @SerializedName("menu_order")
     @Expose
     private Integer menuOrder;
     @SerializedName("meta_data")
     @Expose
+    @Ignore
     private List<Object> metaData = null;
     @SerializedName("_links")
     @Expose
+    @Ignore
     private Links links;
     public final static Parcelable.Creator<Product> CREATOR = new Creator<Product>() {
 
@@ -451,7 +476,7 @@ public class Product extends BaseObservable implements Parcelable {
 
     @Bindable
     public String getPrice() {
-        return price;
+        return price + " ₴";
     }
 
     public void setPrice(String price) {
