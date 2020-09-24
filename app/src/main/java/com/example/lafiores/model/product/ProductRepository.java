@@ -1,7 +1,6 @@
 package com.example.lafiores.model.product;
 
 import android.app.Application;
-import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
@@ -13,7 +12,6 @@ import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import retrofit2.Call;
@@ -28,6 +26,7 @@ public class ProductRepository {
     private ProductDao productDao;
     private LiveData<List<Product>> productList;
 
+
     public ProductRepository(Application application) {
         this.application = application;
         //Room
@@ -35,29 +34,30 @@ public class ProductRepository {
         productDao = database.getProductDao();
     }
 
-    public LiveData<List<Product>> getProductList() {
-        return productDao.loadProducts();
-    }
-
-    public void insertProduct() {
-        new InsertProductAsyncTask(productDao);
-    }
-
-    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
-
-        private ProductDao productDao;
-
-        public InsertProductAsyncTask(ProductDao productDao) {
-            this.productDao = productDao;
-        }
-
-        @Override
-        protected Void doInBackground(Product...products) {
-
-            productDao.saveProducts(Arrays.asList(products));
-            return null;
-        }
-    }
+//    public LiveData<List<Product>> getProductList() {
+//
+//        return productDao.loadProducts();
+//    }
+//
+//    public void insertProduct(ArrayList<Product> products) {
+//        new InsertProductAsyncTask((ProductDao) products);
+//    }
+//
+//    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
+//
+//        private ProductDao productDao;
+//
+//        public InsertProductAsyncTask(ProductDao productDao) {
+//            this.productDao = productDao;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Product...products) {
+//
+//            productDao.saveProducts(Arrays.asList(products));
+//            return null;
+//        }
+//    }
 
 
     //Retrofit

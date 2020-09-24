@@ -1,6 +1,7 @@
 package com.example.lafiores.model.product;
 
 import android.app.Application;
+import android.content.Context;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import com.example.lafiores.R;
+import com.example.lafiores.db.ProductDatabase;
 import com.example.lafiores.service.Constant;
 import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
@@ -25,12 +27,24 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
     private Application application;
     private ArrayList<Product> products = new ArrayList<>();
     private MutableLiveData<String> progressLiveStatus;
+    private ProductDatabase productDatabase;
+    private ProductDataSourceFactory dataSourceFactory;
+
+
 
     public ProductDataSource(ProductApiService productApiService, Application application) {
         this.productApiService = productApiService;
         this.application = application;
         progressLiveStatus = new MutableLiveData<>();
     }
+
+    public ProductDataSource(Context context) {
+        progressLiveStatus = new MutableLiveData<>();
+
+        dataSourceFactory = new ProductDataSourceFactory();
+        productDatabase = ProductDatabase.getInstance(context.getApplicationContext());
+    }
+
 
     public MutableLiveData<String> getProgressLiveStatus() {
         return progressLiveStatus;

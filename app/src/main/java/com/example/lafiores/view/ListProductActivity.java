@@ -59,7 +59,7 @@ public class ListProductActivity extends AppCompatActivity {
                 .AndroidViewModelFactory(getApplication())
                 .create(ListProductActivityViewModel.class);
 
-        //SwipeReresh
+        //SwipeRefresh
         swipeRefreshLayout = activityMainBinding.swipeRefresh;
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.design_default_color_primary_dark));

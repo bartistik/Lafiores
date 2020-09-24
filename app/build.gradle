@@ -98,4 +98,8 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
     implementation "android.arch.persistence.room:runtime:1.1.1"
     kapt "android.arch.persistence.room:compiler:1.1.1"
+
+    // rx
+    implementation "io.reactivex.rxjava3:rxjava:3.0.6"
+
 }
