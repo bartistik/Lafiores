@@ -16,7 +16,7 @@
         <activity android:name=".view.LoginActivity">
         </activity>
         <activity android:name=".view.DetailProductActivity" />
-        <activity android:name=".SplashActivity"
+        <activity android:name=".view.SplashActivity"
             android:theme="@style/SplashTheme">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

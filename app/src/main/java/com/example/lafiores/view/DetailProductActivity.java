@@ -21,7 +21,7 @@ import java.util.ArrayList;
 public class DetailProductActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
 
     TextView titleProductTextView;
-    TextView priceProcuctTextView;
+    TextView priceProductTextView;
     TextView oldPriceTextView;
     TextView descriptionProductTextView;
     Button buyButton;
@@ -33,7 +33,7 @@ public class DetailProductActivity extends AppCompatActivity implements BaseSlid
         setContentView(R.layout.activity_detail_product);
         mDemoSlider = findViewById(R.id.sliderLayout);
         titleProductTextView = findViewById(R.id.titleProductTextView);
-        priceProcuctTextView = findViewById(R.id.priceProduct);
+        priceProductTextView = findViewById(R.id.priceProduct);
         oldPriceTextView = findViewById(R.id.oldPrice);
         descriptionProductTextView = findViewById(R.id.descriptionProductTextView);
         buyButton = findViewById(R.id.buyButton);
@@ -61,7 +61,7 @@ public class DetailProductActivity extends AppCompatActivity implements BaseSlid
         titleProductTextView.setText(intent.getStringExtra("titleProduct"));
         setTitle(intent.getStringExtra("titleProduct"));
 
-        priceProcuctTextView.setText(intent.getStringExtra("priceProduct"));
+        priceProductTextView.setText(intent.getStringExtra("priceProduct"));
         if (intent.getStringExtra("oldPriceProduct") != null) {
             oldPriceTextView.setText(intent.getStringExtra("oldPriceProduct"));
         } else {

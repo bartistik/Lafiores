@@ -19,9 +19,9 @@
             android:id="@+id/authTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="24dp"
             android:fontFamily="@font/montserrat"
-            android:paddingBottom="140dp"
+            android:paddingBottom="18dp"
             android:text="@string/switch_auth_register"
             android:textSize="40sp"
             app:layout_constraintEnd_toEndOf="parent"
@@ -54,7 +54,8 @@
             android:id="@+id/passwordTextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="40dp"
+            android:layout_marginLeft="40dp"
+            android:layout_marginRight="40dp"
             app:boxBackgroundColor="@android:color/white"
             app:errorIconDrawable="@null"
             app:hintAnimationEnabled="true"
@@ -99,23 +100,23 @@
             android:id="@+id/switchAuthRegister"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/switch_to_auth"
             android:padding="20dp"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:text="@string/switch_to_auth"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/authButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/authButton"
             app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextInputLayout" />
-
 
         <Button
             android:id="@+id/authButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:onClick="goToRpoducts"
+            android:padding="20dp"
             android:text="@string/register_button"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switchAuthRegister" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/switchAuthRegister"
+            app:layout_constraintTop_toBottomOf="@+id/confirmPasswordTextInputLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

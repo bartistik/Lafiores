@@ -20,10 +20,12 @@ public abstract class ProductDatabase extends RoomDatabase {
 
     private static ProductDatabase instance;
     private static final Object sLock = new Object();
-    public abstract ProductDao getProductDao();
-private LiveData<PagedList<Product>> productsListPaged;
 
-    public static ProductDatabase getInstance (Context context) {
+    public abstract ProductDao getProductDao();
+
+    private LiveData<PagedList<Product>> productsListPaged;
+
+    public static ProductDatabase getInstance(Context context) {
         synchronized (sLock) {
 
             if (instance == null) {
@@ -36,6 +38,7 @@ private LiveData<PagedList<Product>> productsListPaged;
             return instance;
         }
     }
+
     private void init() {
         PagedList.Config pagedListConfig = (new PagedList.Config.Builder()).setEnablePlaceholders(false)
                 .setInitialLoadSizeHint(Integer.MAX_VALUE).setPageSize(Integer.MAX_VALUE).build();
