@@ -10,6 +10,7 @@ import androidx.databinding.Bindable;
 import androidx.databinding.BindingAdapter;
 import androidx.databinding.library.baseAdapters.BR;
 import androidx.recyclerview.widget.DiffUtil;
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -25,6 +26,7 @@ public class Product extends BaseObservable implements Parcelable {
     @SerializedName("id")
     @Expose
     @PrimaryKey
+    @ColumnInfo(name = "id")
     private Integer id;
     @SerializedName("name")
     @Expose

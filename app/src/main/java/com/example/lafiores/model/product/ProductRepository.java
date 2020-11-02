@@ -7,7 +7,6 @@ import androidx.lifecycle.MutableLiveData;
 
 import com.example.lafiores.R;
 import com.example.lafiores.db.ProductDao;
-import com.example.lafiores.db.ProductDatabase;
 import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
 
@@ -30,31 +29,33 @@ public class ProductRepository {
     public ProductRepository(Application application) {
         this.application = application;
         //Room
-        ProductDatabase database = ProductDatabase.getInstance(application);
-        productDao = database.getProductDao();
+//        ProductDatabase database = ProductDatabase.getInstance(application);
+//        productDao = database.getProductDao();
     }
 
-//    public LiveData<List<Product>> getProductList() {
+    public LiveData<List<Product>> getProductList() {
+
+        return productDao.loadProducts();
+    }
+
+//    public void insertProduct(Product products) {
+//        new InsertProductAsyncTask(productDao).execute();
 //
-//        return productDao.loadProducts();
-//    }
-//
-//    public void insertProduct(ArrayList<Product> products) {
-//        new InsertProductAsyncTask((ProductDao) products);
+//        Log.d("ROOM",  productDao + "");
 //    }
 //
 //    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
 //
-//        private ProductDao productDao;
+//        private ProductDao productAsyncDao;
 //
 //        public InsertProductAsyncTask(ProductDao productDao) {
-//            this.productDao = productDao;
+//            this.productAsyncDao = productDao;
 //        }
 //
 //        @Override
 //        protected Void doInBackground(Product...products) {
 //
-//            productDao.saveProducts(Arrays.asList(products));
+//            productAsyncDao.saveProducts(products[0]);
 //            return null;
 //        }
 //    }

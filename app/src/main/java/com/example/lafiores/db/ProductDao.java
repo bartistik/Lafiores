@@ -17,7 +17,8 @@ public interface ProductDao {
     LiveData<List<Product>> loadProducts();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void saveProducts(List<Product> productList);
+    Long saveProducts(Product productList);
+
 
     @Query("SELECT * FROM products WHERE id = :id")
     LiveData<Product> getProduct(int id);

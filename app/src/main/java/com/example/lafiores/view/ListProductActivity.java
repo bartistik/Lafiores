@@ -40,6 +40,7 @@ public class ListProductActivity extends AppCompatActivity {
     private SwipeRefreshLayout swipeRefreshLayout;
     private TypeWriterView typeWriterView;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,6 +56,7 @@ public class ListProductActivity extends AppCompatActivity {
         typeWriterView.animateText(getResources().getString(R.string.downloadProducts));
 
         activityMainBinding.setButtonHandler(listProductActivityClickHandlers);
+        errConnectionRestartButtonClicked = activityMainBinding.errorConnectionRestartButton;
         mainActivityViewModel = new ViewModelProvider
                 .AndroidViewModelFactory(getApplication())
                 .create(ListProductActivityViewModel.class);
@@ -71,34 +73,20 @@ public class ListProductActivity extends AppCompatActivity {
                     }
                 }
         );
-
         getListProducts();
     }
 
     public void getListProducts() {
-        errConnectionRestartButtonClicked = activityMainBinding.errorConnectionRestartButton;
-//      проверяем интернет-соединение
-        if (!Constant.checkNetworkConnection(this)) {
-            Snackbar.make(findViewById(R.id.loadingIndicator), R.string.error_network_connection, Snackbar.LENGTH_LONG)
-                    .show();
-            errConnectionRestartButtonClicked = activityMainBinding.errorConnectionRestartButton;
-            errConnectionRestartButtonClicked.setVisibility(View.VISIBLE);
-        } else {
-            errConnectionRestartButtonClicked.setVisibility(View.GONE);
-            mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
-                @Override
-                public void onChanged(PagedList<Product> productsPageList) {
-
-                    productsList = productsPageList;
-                    fillProductsRecyclerView();
-                }
-            });
-        }
-
+        mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
+            @Override
+            public void onChanged(PagedList<Product> productsPageList) {
+                productsList = productsPageList;
+                fillProductsRecyclerView();
+            }
+        });
     }
 
     public void fillProductsRecyclerView() {
-
         recyclerView = activityMainBinding.categoryRecycleView;
         adapter = new ListProductAdapter(this);
         adapter.submitList(productsList);
@@ -115,14 +103,13 @@ public class ListProductActivity extends AppCompatActivity {
         }
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
 
         //Проверка загрузки данных. Loaded - скрыть progressBar. Loading - показать progressBar
         mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
-            Log.d("ProgressBarSTATUS1", Objects.requireNonNull(status));
+            Log.d("ProgressBarSTATUS", Objects.requireNonNull(status));
             if (status.equalsIgnoreCase(Constant.STATE_DATA_LOADED)) {
                 activityMainBinding.loadingIndicator.setVisibility(View.GONE);
                 activityMainBinding.downloadProductTextView.setVisibility(View.GONE);
@@ -135,10 +122,26 @@ public class ListProductActivity extends AppCompatActivity {
         });
     }
 
+    //      проверка интернет-соединения
+    private Boolean checkNetworkConnection() {
+        if (!Constant.checkNetworkConnection(this)) {
+            Snackbar.make(findViewById(R.id.loadingIndicator), R.string.error_network_connection, Snackbar.LENGTH_LONG)
+                    .show();
+            errConnectionRestartButtonClicked.setVisibility(View.VISIBLE);
+            return false;
+        } else {
+            errConnectionRestartButtonClicked.setVisibility(View.GONE);
+            return true;
+        }
+    }
+
     public class ListProductClickHandlers extends ListProductActivity {
         public void errConnectionRestartButtonClicked(View view) {
-            errConnectionRestartButtonClicked.setVisibility(View.GONE);
-            getListProducts();
+            //      проверяем интернет-соединение
+            if(ListProductActivity.this.checkNetworkConnection()) {
+                errConnectionRestartButtonClicked.setVisibility(View.GONE);
+                getListProducts();
+            }
         }
     }
 }

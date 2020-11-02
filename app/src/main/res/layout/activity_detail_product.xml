@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:scrollbars="none"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:scrollbars="none">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white" >
+        android:background="@android:color/white">
 
         <com.daimajia.slider.library.SliderLayout
             android:id="@+id/sliderLayout"
             android:layout_width="wrap_content"
-            android:layout_height="450dp"/>
+            android:layout_height="450dp" />
 
 
         <TextView
@@ -47,12 +47,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/titleProductTextView"
+            android:layout_marginBottom="10dp"
             android:layout_toRightOf="@id/priceProduct"
             android:paddingEnd="40dp"
             android:text="Загружаем"
             android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="10dp"/>
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/buyButton"
@@ -61,24 +61,55 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/titleProductTextView"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="32dp"
-            android:textStyle="bold"
             android:layout_centerInParent="true"
+            android:layout_marginRight="32dp"
             android:fontFamily="@font/montserrat"
-            android:text="@string/buyButton" />
+            android:text="@string/buyButton"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/changeOnDescriptionProductTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buyButton"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
+            android:paddingStart="40dp"
+            android:text="@string/description_product"
+            android:textAllCaps="true" />
+
+        <TextView
+            android:id="@+id/changeOnDetailsProductTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/buyButton"
+            android:layout_alignParentEnd="true"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/montserrat"
+            android:paddingEnd="40dp"
+            android:text="@string/change_on_details_product_view"
+            android:textAllCaps="true" />
 
         <TextView
             android:id="@+id/descriptionProductTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/buyButton"
+            android:layout_below="@id/changeOnDescriptionProductTextView"
             android:layout_margin="20dp"
             android:layout_marginStart="20dp"
-            android:layout_marginTop="20dp"
             android:layout_marginEnd="20dp"
             android:layout_marginBottom="20dp"
             android:fontFamily="@font/montserrat"
-            android:text="TextView" />
+            android:text="TextView"
+            android:visibility="gone" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/detailProductRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/changeOnDetailsProductTextView" />
 
 
     </RelativeLayout>

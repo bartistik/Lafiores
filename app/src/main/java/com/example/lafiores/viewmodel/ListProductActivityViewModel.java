@@ -23,7 +23,7 @@ import java.util.concurrent.Executors;
 
 public class ListProductActivityViewModel extends AndroidViewModel {
 
-    ProductRepository productRepository;
+    private ProductRepository productRepository;
     private LiveData<ProductDataSource> productDataSourceLiveData;
     private Executor executor;
     private LiveData<PagedList<Product>> pagedListLiveData;
@@ -56,7 +56,6 @@ public class ListProductActivityViewModel extends AndroidViewModel {
     }
 
     public MutableLiveData<List<Product>> getAllProductData() {
-
         return productRepository.getMutableLiveData();
     }
 

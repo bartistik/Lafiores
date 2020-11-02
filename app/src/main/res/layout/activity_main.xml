@@ -7,6 +7,10 @@
     <data>
 
         <import type="android.view.View" />
+        <import type="com.example.lafiores.service.Constant"/>
+        <variable
+            name="visibilityLoadingBar"
+            type="com.example.lafiores.viewmodel.ListProductActivityViewModel" />
 
         <variable
             name="buttonHandler"
@@ -70,7 +74,6 @@
 
             <in.codeshuffle.typewriterview.TypeWriterView
                 android:id="@+id/downloadProductTextView"
-
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/downloadProductsLoadingIndicator"

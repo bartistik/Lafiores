@@ -2,6 +2,7 @@ package com.example.lafiores.model.product;
 
 import android.app.Application;
 import android.content.Context;
+import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.PageKeyedDataSource;
 
 import com.example.lafiores.R;
+import com.example.lafiores.db.ProductDao;
 import com.example.lafiores.db.ProductDatabase;
 import com.example.lafiores.service.Constant;
 import com.example.lafiores.service.ProductApiService;
@@ -25,17 +27,20 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
     private ProductApiService productApiService;
     private Application application;
-    private ArrayList<Product> products = new ArrayList<>();
+    private ArrayList<Product> products = new ArrayList<Product>();
     private MutableLiveData<String> progressLiveStatus;
     private ProductDatabase productDatabase;
     private ProductDataSourceFactory dataSourceFactory;
-
+    private ProductDao productDao;
+    private ProductRepository productRepository;
 
 
     public ProductDataSource(ProductApiService productApiService, Application application) {
         this.productApiService = productApiService;
         this.application = application;
         progressLiveStatus = new MutableLiveData<>();
+        ProductDatabase database = ProductDatabase.getInstance(application);
+        productDao = database.getProductDao();
     }
 
     public ProductDataSource(Context context) {
@@ -52,7 +57,6 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
     @Override
     public void loadInitial(@NonNull LoadInitialParams<Integer> params, @NonNull LoadInitialCallback<Integer, Product> callback) {
-
         progressLiveStatus.postValue(Constant.STATE_DATA_START_LOADING);
         productApiService = RetrofitInstance.getService();
         Call<List<Product>> call = productApiService.getAllProductsWithPaging(1,
@@ -67,13 +71,12 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
                 if (products != null) {
                     callback.onResult(products, null, 2);
+                    new InsertProductAsyncTask(productDao);
                     progressLiveStatus.postValue(Constant.STATE_DATA_LOADED);
+
                 } else {
                     progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
-                    Log.d("Products", " null");
-
                 }
-
             }
 
             @Override
@@ -110,7 +113,6 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 } else {
 
                 }
-
             }
 
             @Override
@@ -119,7 +121,23 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 Log.d("ProgressLiveStatus: ", t.toString());
             }
         });
-
     }
 
+    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
+
+        private ProductDao productDao;
+
+        public InsertProductAsyncTask(ProductDao productDao) {
+            this.productDao = productDao;
+        }
+
+        @Override
+        protected Void doInBackground(Product... products) {
+
+            Log.d("ROOM", products[1].getName());
+            productDao.saveProducts(products[1]);
+            return null;
+        }
+    }
 }
+

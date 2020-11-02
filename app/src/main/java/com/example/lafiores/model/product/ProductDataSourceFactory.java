@@ -22,7 +22,6 @@ public class ProductDataSourceFactory extends DataSource.Factory {
     }
 
     public ProductDataSourceFactory() {
-
     }
 
     @NonNull
