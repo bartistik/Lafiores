@@ -20,6 +20,7 @@ import com.example.lafiores.R;
 import com.example.lafiores.adapter.ListProductAdapter;
 import com.example.lafiores.databinding.ActivityMainBinding;
 import com.example.lafiores.model.product.Product;
+import com.example.lafiores.service.AsyncTasks;
 import com.example.lafiores.service.Constant;
 import com.example.lafiores.viewmodel.ListProductActivityViewModel;
 import com.google.android.material.snackbar.Snackbar;
@@ -48,13 +49,7 @@ public class ListProductActivity extends AppCompatActivity {
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         listProductActivityClickHandlers = new ListProductClickHandlers();
-
-        //анимация текста при загрузке товаров
         typeWriterView = activityMainBinding.downloadProductTextView;
-        typeWriterView.setDelay(1);
-        typeWriterView.setWithMusic(false);
-        typeWriterView.animateText(getResources().getString(R.string.downloadProducts));
-
         activityMainBinding.setButtonHandler(listProductActivityClickHandlers);
         errConnectionRestartButtonClicked = activityMainBinding.errorConnectionRestartButton;
         mainActivityViewModel = new ViewModelProvider
@@ -63,20 +58,40 @@ public class ListProductActivity extends AppCompatActivity {
 
         //SwipeRefresh
         swipeRefreshLayout = activityMainBinding.swipeRefresh;
-        swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.design_default_color_primary_dark));
         swipeRefreshLayout.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        getListProducts();
+                () -> {
+                    try {
+                        Thread.sleep(2000);
+                        swipeRefreshLayout.setRefreshing(false);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    checkInternetState();
                 }
         );
-        getListProducts();
+        checkInternetState();
     }
 
-    public void getListProducts() {
+
+    private void checkInternetState() {
+        new AsyncTasks.InternetCheck(isInternetEnabled -> {
+            if (isInternetEnabled) {
+                getListProducts();
+                errConnectionRestartButtonClicked.setVisibility(View.GONE);
+            } else {
+                Snackbar.make(findViewById(R.id.loadingIndicator), R.string.error_network_connection, Snackbar.LENGTH_LONG)
+                        .show();
+                errConnectionRestartButtonClicked.setVisibility(View.VISIBLE);
+                typeWriterView.setDelay(1);
+                typeWriterView.setWithMusic(false);
+                typeWriterView.animateText(getResources().getString(R.string.notInternet));
+            }
+        });
+    }
+
+    private void getListProducts() {
+        launchTypeWriter();
         mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
             @Override
             public void onChanged(PagedList<Product> productsPageList) {
@@ -84,6 +99,13 @@ public class ListProductActivity extends AppCompatActivity {
                 fillProductsRecyclerView();
             }
         });
+    }
+
+    private void launchTypeWriter() {
+        //анимация текста при загрузке товаров
+        typeWriterView.setDelay(1);
+        typeWriterView.setWithMusic(false);
+        typeWriterView.animateText(getResources().getString(R.string.downloadProducts));
     }
 
     public void fillProductsRecyclerView() {
@@ -94,12 +116,9 @@ public class ListProductActivity extends AppCompatActivity {
                 Configuration.ORIENTATION_PORTRAIT) {
             recyclerView.setLayoutManager(
                     new GridLayoutManager(this, 2));
-
         } else {
-
             recyclerView.setLayoutManager(
                     new GridLayoutManager(this, 4));
-
         }
 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -109,7 +128,7 @@ public class ListProductActivity extends AppCompatActivity {
 
         //Проверка загрузки данных. Loaded - скрыть progressBar. Loading - показать progressBar
         mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
-            Log.d("ProgressBarSTATUS", Objects.requireNonNull(status));
+            Log.d("ProgressBarStatus", Objects.requireNonNull(status));
             if (status.equalsIgnoreCase(Constant.STATE_DATA_LOADED)) {
                 activityMainBinding.loadingIndicator.setVisibility(View.GONE);
                 activityMainBinding.downloadProductTextView.setVisibility(View.GONE);
@@ -122,26 +141,8 @@ public class ListProductActivity extends AppCompatActivity {
         });
     }
 
-    //      проверка интернет-соединения
-    private Boolean checkNetworkConnection() {
-        if (!Constant.checkNetworkConnection(this)) {
-            Snackbar.make(findViewById(R.id.loadingIndicator), R.string.error_network_connection, Snackbar.LENGTH_LONG)
-                    .show();
-            errConnectionRestartButtonClicked.setVisibility(View.VISIBLE);
-            return false;
-        } else {
-            errConnectionRestartButtonClicked.setVisibility(View.GONE);
-            return true;
-        }
-    }
-
     public class ListProductClickHandlers extends ListProductActivity {
         public void errConnectionRestartButtonClicked(View view) {
-            //      проверяем интернет-соединение
-            if(ListProductActivity.this.checkNetworkConnection()) {
-                errConnectionRestartButtonClicked.setVisibility(View.GONE);
-                getListProducts();
-            }
         }
     }
 }

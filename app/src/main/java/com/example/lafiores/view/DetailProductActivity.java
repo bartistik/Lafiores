@@ -1,6 +1,7 @@
 package com.example.lafiores.view;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.text.Html;
 import android.view.View;
@@ -72,13 +73,16 @@ public class DetailProductActivity extends AppCompatActivity implements BaseSlid
         productImageSlider.startAutoCycle(4000, 5000, true);
 
         titleProductTextView.setText(product.getName());
-        priceProductTextView.setText(product.getPrice());
 
         if (product.getSalePrice() != null) {
-            oldPriceTextView.setText(product.getSalePrice());
+            priceProductTextView.setText(product.getSalePrice() + " ₴");
+            oldPriceTextView.setPaintFlags(oldPriceTextView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            oldPriceTextView.setText(product.getRegularPrice() + " ₴");
         } else {
+            priceProductTextView.setText(product.getRegularPrice() + " ₴");
             oldPriceTextView.setVisibility(View.GONE);
         }
+
         descriptionProductTextView.setText(Html.fromHtml(product.getDescription()));
         detailsProductAdapter = new DetailsProductAdapter((ArrayList<Attribute>) product.getAttributes(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(DetailProductActivity.this));

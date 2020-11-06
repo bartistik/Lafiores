@@ -2,7 +2,6 @@ package com.example.lafiores.model.product;
 
 import android.app.Application;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -50,7 +49,6 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
         productDatabase = ProductDatabase.getInstance(context.getApplicationContext());
     }
 
-
     public MutableLiveData<String> getProgressLiveStatus() {
         return progressLiveStatus;
     }
@@ -71,9 +69,8 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
                 if (products != null) {
                     callback.onResult(products, null, 2);
-                    new InsertProductAsyncTask(productDao);
+//                    new InsertProductAsyncTask(productDao);
                     progressLiveStatus.postValue(Constant.STATE_DATA_LOADED);
-
                 } else {
                     progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
                 }
@@ -123,21 +120,19 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
         });
     }
 
-    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
-
-        private ProductDao productDao;
-
-        public InsertProductAsyncTask(ProductDao productDao) {
-            this.productDao = productDao;
-        }
-
-        @Override
-        protected Void doInBackground(Product... products) {
-
-            Log.d("ROOM", products[1].getName());
-            productDao.saveProducts(products[1]);
-            return null;
-        }
-    }
+//    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
+//
+//        private ProductDao productDao;
+//
+//        public InsertProductAsyncTask(ProductDao productDao) {
+//            this.productDao = productDao;
+//        }
+//
+//        @Override
+//        protected Void doInBackground(Product... products) {
+//            productDao.saveProducts();
+//            return null;
+//        }
+//    }
 }
 

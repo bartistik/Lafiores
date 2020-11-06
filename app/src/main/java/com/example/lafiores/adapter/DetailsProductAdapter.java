@@ -2,7 +2,6 @@ package com.example.lafiores.adapter;
 
 import android.content.Context;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,7 +58,6 @@ public class DetailsProductAdapter extends RecyclerView.Adapter<DetailsProductAd
         }
 
         public void bind(Attribute attribute) {
-            Log.d("attribute", attribute.getName());
             nameDetail.setText(attribute.getName());
             optionDetail.setText(TextUtils.join(", ", attribute.getOptions()));
         }

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.lafiores.R
 import com.example.lafiores.databinding.ActivityLoginBinding
+import com.example.lafiores.service.AsyncTasks
 import com.example.lafiores.service.Constant
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
@@ -61,11 +62,14 @@ class LoginActivity : AppCompatActivity() {
         binding.authButton.setOnClickListener(View.OnClickListener {
 
             //      проверяем интернет-соединение
-            if (!Constant.checkNetworkConnection(this)) {
-                Snackbar.make(findViewById(R.id.emailEditText), R.string.error_network_connection, Snackbar.LENGTH_SHORT)
+            //НЕ ПРОТЕСТИЛ!!
+            AsyncTasks.InternetCheck {
+                if(!it) {
+                    Snackbar.make(findViewById(R.id.emailEditText), R.string.error_network_connection, Snackbar.LENGTH_SHORT)
                         .show()
-                return@OnClickListener
+                    return@InternetCheck
             }
+        }
 
             val emailUser = binding.emailEditText.text.toString().trim()
             val passwordUser = binding.passwordEditText.text.toString().trim()
@@ -105,7 +109,6 @@ class LoginActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT).show()
                     }
                 }
-
     }
 
     //Авторизация
