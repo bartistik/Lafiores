@@ -3,8 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
-        <item android:title="dsadas"></item>
-        <item android:title="dasdas"></item>
+        <item android:title="Кошик"
+            android:id="@+id/cart">
+        </item>
+
+        <item android:title="Личный кабинет"
+            android:id="@+id/authCabinet">
+        </item>
     </group>
 
 </menu>

@@ -1,6 +1,5 @@
 package com.example.lafiores.adapter;
 
-import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,19 +11,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.lafiores.R;
 import com.example.lafiores.model.product.Attribute;
+import com.example.lafiores.view.DetailProductActivity;
 
 import java.util.ArrayList;
 
 public class DetailsProductAdapter extends RecyclerView.Adapter<DetailsProductAdapter.DetailsViewHolder> {
 
-    private ArrayList<Attribute> detailsList = new ArrayList<>();
-    private Context context;
+    private final ArrayList<Attribute> detailsList;
 
-    public DetailsProductAdapter(ArrayList<Attribute> detailsList, Context context) {
+    public DetailsProductAdapter(ArrayList<Attribute> detailsList, DetailProductActivity detailProductActivity) {
         this.detailsList = detailsList;
-        this.context = context;
     }
-
 
     @NonNull
     @Override
@@ -48,8 +45,8 @@ public class DetailsProductAdapter extends RecyclerView.Adapter<DetailsProductAd
 
     public class DetailsViewHolder extends RecyclerView.ViewHolder {
 
-        private TextView nameDetail;
-        private TextView optionDetail;
+        private final TextView nameDetail;
+        private final TextView optionDetail;
 
         public DetailsViewHolder(@NonNull View itemView) {
             super(itemView);

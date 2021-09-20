@@ -7,11 +7,9 @@ import android.text.Html;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.daimajia.slider.library.SliderLayout;
 import com.daimajia.slider.library.SliderTypes.BaseSliderView;
 import com.daimajia.slider.library.SliderTypes.DefaultSliderView;
@@ -21,7 +19,6 @@ import com.example.lafiores.model.product.Attribute;
 import com.example.lafiores.model.product.Image;
 import com.example.lafiores.model.product.Product;
 import com.google.gson.Gson;
-
 import java.util.ArrayList;
 
 public class DetailProductActivity extends AppCompatActivity implements BaseSliderView.OnSliderClickListener {
@@ -76,7 +73,7 @@ public class DetailProductActivity extends AppCompatActivity implements BaseSlid
 
         if (product.getSalePrice() != null) {
             priceProductTextView.setText(product.getSalePrice() + " ₴");
-            oldPriceTextView.setPaintFlags(oldPriceTextView.getPaintFlags()| Paint.STRIKE_THRU_TEXT_FLAG);
+            oldPriceTextView.setPaintFlags(oldPriceTextView.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
             oldPriceTextView.setText(product.getRegularPrice() + " ₴");
         } else {
             priceProductTextView.setText(product.getRegularPrice() + " ₴");
@@ -88,6 +85,12 @@ public class DetailProductActivity extends AppCompatActivity implements BaseSlid
         recyclerView.setLayoutManager(new LinearLayoutManager(DetailProductActivity.this));
         recyclerView.setAdapter(detailsProductAdapter);
 
+        buyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                cartDao.insertProductCart(product.getId());
+            }
+        });
         changeOnDetailsTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

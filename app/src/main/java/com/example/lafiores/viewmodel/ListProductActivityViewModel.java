@@ -1,7 +1,6 @@
 package com.example.lafiores.viewmodel;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -9,24 +8,22 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
-
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.model.product.ProductDataSource;
 import com.example.lafiores.model.product.ProductDataSourceFactory;
 import com.example.lafiores.model.product.ProductRepository;
 import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
-
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
 public class ListProductActivityViewModel extends AndroidViewModel {
 
-    private ProductRepository productRepository;
-    private LiveData<ProductDataSource> productDataSourceLiveData;
-    private Executor executor;
-    private LiveData<PagedList<Product>> pagedListLiveData;
+    private final ProductRepository productRepository;
+    private final LiveData<ProductDataSource> productDataSourceLiveData;
+    private final Executor executor;
+    private final LiveData<PagedList<Product>> pagedListLiveData;
     private LiveData<String> progressLoadStatus = new MutableLiveData<>();
 
     public ListProductActivityViewModel(@NonNull Application application) {

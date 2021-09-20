@@ -1,7 +1,6 @@
 package com.example.lafiores.service;
 
 import android.os.AsyncTask;
-
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -11,7 +10,7 @@ public class AsyncTasks {
     //Check Internet
     public static class InternetCheck extends AsyncTask<Void, Void, Boolean> {
 
-        private Consumer mConsumer;
+        private final Consumer mConsumer;
 
         public interface Consumer {
             void accept(Boolean internet);

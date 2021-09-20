@@ -1,11 +1,9 @@
 package com.example.lafiores.model.product;
 
 import android.app.Application;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
-
 import com.example.lafiores.service.ProductApiService;
 
 public class ProductDataSourceFactory extends DataSource.Factory {

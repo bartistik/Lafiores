@@ -20,6 +20,7 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
+
 @Entity(tableName = "products")
 public class Product extends BaseObservable implements Parcelable {
 
@@ -166,6 +167,7 @@ public class Product extends BaseObservable implements Parcelable {
     private Dimensions dimensions;
     @SerializedName("shipping_required")
     @Expose
+    @Ignore
     private Boolean shippingRequired;
     @SerializedName("shipping_taxable")
     @Expose
@@ -229,7 +231,6 @@ public class Product extends BaseObservable implements Parcelable {
             Glide
                     .with(imageView)
                     .load(images.get(0).getSrc().split(".png")[0] + "-510x510.png")
-//                .placeholder(R.drawable.ic_launcher_foreground)
                     .into(imageView);
     }
 
@@ -261,11 +262,6 @@ public class Product extends BaseObservable implements Parcelable {
     @Ignore
     private Links links;
     public final static Parcelable.Creator<Product> CREATOR = new Creator<Product>() {
-
-
-        @SuppressWarnings({
-                "unchecked"
-        })
         public Product createFromParcel(Parcel in) {
             return new Product(in);
         }
@@ -273,7 +269,6 @@ public class Product extends BaseObservable implements Parcelable {
         public Product[] newArray(int size) {
             return (new Product[size]);
         }
-
     };
 
     protected Product(Parcel in) {

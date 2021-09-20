@@ -1,13 +1,17 @@
 package com.example.lafiores.view;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.GravityCompat;
 import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
@@ -15,40 +19,37 @@ import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 import com.example.lafiores.R;
 import com.example.lafiores.adapter.ListProductAdapter;
 import com.example.lafiores.databinding.ActivityMainBinding;
+import com.example.lafiores.interfaces.RecyclerViewClickListener;
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.service.AsyncTasks;
 import com.example.lafiores.service.Constant;
+import com.example.lafiores.viewmodel.CartViewModel;
 import com.example.lafiores.viewmodel.ListProductActivityViewModel;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Objects;
-
 import in.codeshuffle.typewriterview.TypeWriterView;
 
-public class ListProductActivity extends AppCompatActivity {
+public class ListProductActivity extends AppCompatActivity
+        implements RecyclerViewClickListener, NavigationView.OnNavigationItemSelectedListener {
 
     private PagedList<Product> productsList;
-    private ListProductAdapter adapter;
-    private RecyclerView recyclerView;
     private Button errConnectionRestartButtonClicked;
     private ListProductActivityViewModel mainActivityViewModel;
     private ActivityMainBinding activityMainBinding;
-    private ListProductClickHandlers listProductActivityClickHandlers;
     private SwipeRefreshLayout swipeRefreshLayout;
     private TypeWriterView typeWriterView;
-
+    private CartViewModel cartViewModel;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
 
         activityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-        listProductActivityClickHandlers = new ListProductClickHandlers();
+        ListProductClickHandlers listProductActivityClickHandlers = new ListProductClickHandlers();
         typeWriterView = activityMainBinding.downloadProductTextView;
         activityMainBinding.setButtonHandler(listProductActivityClickHandlers);
         errConnectionRestartButtonClicked = activityMainBinding.errorConnectionRestartButton;
@@ -73,7 +74,7 @@ public class ListProductActivity extends AppCompatActivity {
         checkInternetState();
     }
 
-
+    //Проверка инета
     private void checkInternetState() {
         new AsyncTasks.InternetCheck(isInternetEnabled -> {
             if (isInternetEnabled) {
@@ -90,6 +91,7 @@ public class ListProductActivity extends AppCompatActivity {
         });
     }
 
+    //Получаем список товаров и заполняем ресайклер
     private void getListProducts() {
         launchTypeWriter();
         mainActivityViewModel.getPagedListLiveData().observe(this, new Observer<PagedList<Product>>() {
@@ -101,16 +103,17 @@ public class ListProductActivity extends AppCompatActivity {
         });
     }
 
+    //Анимация при загрузке товаров
     private void launchTypeWriter() {
-        //анимация текста при загрузке товаров
         typeWriterView.setDelay(1);
         typeWriterView.setWithMusic(false);
         typeWriterView.animateText(getResources().getString(R.string.downloadProducts));
     }
 
+    //Наполняем ресайклер
     public void fillProductsRecyclerView() {
-        recyclerView = activityMainBinding.categoryRecycleView;
-        adapter = new ListProductAdapter(this);
+        RecyclerView recyclerView = activityMainBinding.categoryRecycleView;
+        ListProductAdapter adapter = new ListProductAdapter(this, this);
         adapter.submitList(productsList);
         if (getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_PORTRAIT) {
@@ -128,7 +131,6 @@ public class ListProductActivity extends AppCompatActivity {
 
         //Проверка загрузки данных. Loaded - скрыть progressBar. Loading - показать progressBar
         mainActivityViewModel.getProgressLoadStatus().observe(this, status -> {
-            Log.d("ProgressBarStatus", Objects.requireNonNull(status));
             if (status.equalsIgnoreCase(Constant.STATE_DATA_LOADED)) {
                 activityMainBinding.loadingIndicator.setVisibility(View.GONE);
                 activityMainBinding.downloadProductTextView.setVisibility(View.GONE);
@@ -141,9 +143,26 @@ public class ListProductActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void recyclerViewClickListener(int position) {
+        cartViewModel = new ViewModelProvider(this).get(CartViewModel.class);
+        cartViewModel.insertData(getApplicationContext(), position, 1);
+    }
+
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.cart) {
+            Intent intent = new Intent(this, CartActivity.class);
+            startActivity(intent);
+        }
+        DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawerLayout);
+        drawerLayout.closeDrawer(GravityCompat.START);
+        return true;
+    }
+
     public class ListProductClickHandlers extends ListProductActivity {
         public void errConnectionRestartButtonClicked(View view) {
         }
     }
-}
 
+}

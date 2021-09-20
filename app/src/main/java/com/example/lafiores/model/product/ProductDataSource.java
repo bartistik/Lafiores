@@ -2,7 +2,6 @@ package com.example.lafiores.model.product;
 
 import android.app.Application;
 import android.content.Context;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -27,7 +26,7 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
     private ProductApiService productApiService;
     private Application application;
     private ArrayList<Product> products = new ArrayList<Product>();
-    private MutableLiveData<String> progressLiveStatus;
+    private final MutableLiveData<String> progressLiveStatus;
     private ProductDatabase productDatabase;
     private ProductDataSourceFactory dataSourceFactory;
     private ProductDao productDao;
@@ -69,7 +68,6 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
 
                 if (products != null) {
                     callback.onResult(products, null, 2);
-//                    new InsertProductAsyncTask(productDao);
                     progressLiveStatus.postValue(Constant.STATE_DATA_LOADED);
                 } else {
                     progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
@@ -79,16 +77,13 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
-                Log.d("ProgressLiveStatus: ", t.toString());
             }
         });
-
     }
 
     @Override
     public void loadBefore(@NonNull LoadParams<Integer> params, @NonNull LoadCallback<Integer, Product> callback) {
         callback.onResult(products, params.key - 1);
-
     }
 
     @Override
@@ -99,6 +94,7 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
                 application.getApplicationContext().getString(R.string.consumer_secret),
                 application.getApplicationContext().getString(R.string.lang));
         progressLiveStatus.postValue(Constant.STATE_DATA_LOADING);
+
         call.enqueue(new Callback<List<Product>>() {
             @Override
             public void onResponse(Call<List<Product>> call, Response<List<Product>> response) {
@@ -115,24 +111,8 @@ public class ProductDataSource extends PageKeyedDataSource<Integer, Product> {
             @Override
             public void onFailure(Call<List<Product>> call, Throwable t) {
                 progressLiveStatus.postValue(Constant.STATE_DATA_ERROR);
-                Log.d("ProgressLiveStatus: ", t.toString());
             }
         });
     }
-
-//    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
-//
-//        private ProductDao productDao;
-//
-//        public InsertProductAsyncTask(ProductDao productDao) {
-//            this.productDao = productDao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Product... products) {
-//            productDao.saveProducts();
-//            return null;
-//        }
-//    }
 }
 

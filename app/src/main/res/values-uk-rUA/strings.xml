@@ -25,4 +25,9 @@
     <string name="register_button">Регистрация</string>
     <string name="password_edit_text_not_match_error">Пароли не совпадают!</string>
     <string name="sign_out">Выйти</string>
+    <string name="confirm_password_edit_text_empty_error">Підтвердіть пароль!</string>
+    <string name="description_product"><u>Опис</u></string>
+    <string name="change_on_details_product_view"><u>Характеристики</u></string>
+    <string name="notInternet">Немає з\'єднання!</string>
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.example.lafiores.db;
 
 import android.content.Context;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
 import androidx.paging.LivePagedListBuilder;
@@ -13,10 +12,9 @@ import androidx.room.RoomDatabase;
 import com.example.lafiores.model.product.Product;
 import com.example.lafiores.model.product.ProductDataSourceFactory;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
-@Database(entities = {Product.class}, version = 1)
+@Database(entities = {Product.class}, version = 1, exportSchema = false)
 public abstract class ProductDatabase extends RoomDatabase {
 
     private static ProductDatabase instance;
@@ -26,15 +24,13 @@ public abstract class ProductDatabase extends RoomDatabase {
     private LiveData<PagedList<Product>> productsListPaged;
 
     public static ProductDatabase getInstance(Context context) {
-
-            if (instance == null) {
-                synchronized (ProductDatabase.class) {
+        if (instance == null) {
+            synchronized (ProductDatabase.class) {
                 instance = Room.databaseBuilder(context.getApplicationContext(),
                         ProductDatabase.class, "productDB")
                         .fallbackToDestructiveMigration()
                         .build();
                 instance.init();
-                Log.d("ROOM", "Create DB");
             }
         }
         return instance;
@@ -48,4 +44,5 @@ public abstract class ProductDatabase extends RoomDatabase {
         LivePagedListBuilder livePagedListBuilder = new LivePagedListBuilder(dataSourceFactory, pagedListConfig);
         productsListPaged = livePagedListBuilder.setFetchExecutor(executor).build();
     }
+
 }

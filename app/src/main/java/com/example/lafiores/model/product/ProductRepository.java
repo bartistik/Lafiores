@@ -1,18 +1,14 @@
 package com.example.lafiores.model.product;
 
 import android.app.Application;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-
 import com.example.lafiores.R;
 import com.example.lafiores.db.ProductDao;
 import com.example.lafiores.service.ProductApiService;
 import com.example.lafiores.service.RetrofitInstance;
-
 import java.util.ArrayList;
 import java.util.List;
-
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -20,48 +16,20 @@ import retrofit2.Response;
 public class ProductRepository {
 
     private ArrayList<Product> products = new ArrayList<>();
-    private MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
-    private Application application;
+    private final MutableLiveData<List<Product>> mutableLiveData = new MutableLiveData<>();
+    private final Application application;
     private ProductDao productDao;
     private LiveData<List<Product>> productList;
 
 
     public ProductRepository(Application application) {
         this.application = application;
-        //Room
-//        ProductDatabase database = ProductDatabase.getInstance(application);
-//        productDao = database.getProductDao();
     }
 
     public LiveData<List<Product>> getProductList() {
-
         return productDao.loadProducts();
     }
 
-//    public void insertProduct(Product products) {
-//        new InsertProductAsyncTask(productDao).execute();
-//
-//        Log.d("ROOM",  productDao + "");
-//    }
-//
-//    private static class InsertProductAsyncTask extends AsyncTask<Product, Void, Void> {
-//
-//        private ProductDao productAsyncDao;
-//
-//        public InsertProductAsyncTask(ProductDao productDao) {
-//            this.productAsyncDao = productDao;
-//        }
-//
-//        @Override
-//        protected Void doInBackground(Product...products) {
-//
-//            productAsyncDao.saveProducts(products[0]);
-//            return null;
-//        }
-//    }
-
-
-    //Retrofit
     public MutableLiveData<List<Product>> getMutableLiveData() {
         ProductApiService productApiService = RetrofitInstance.getService();
 
@@ -84,5 +52,6 @@ public class ProductRepository {
         });
         return mutableLiveData;
     }
+
 }
 

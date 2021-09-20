@@ -2,7 +2,6 @@ package com.example.lafiores.view
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -10,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import com.example.lafiores.R
 import com.example.lafiores.databinding.ActivityLoginBinding
 import com.example.lafiores.service.AsyncTasks
-import com.example.lafiores.service.Constant
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
@@ -35,9 +33,7 @@ class LoginActivity : AppCompatActivity() {
         emailTextInputLayout = binding.emailTextInputLayout
         passwordTextInputLayout = binding.passwordTextInputLayout
         confirmPasswordTextInputLayout = binding.confirmPasswordTextInputLayout
-
         auth = Firebase.auth
-//        val currentUser = auth.currentUser
 
         binding.switchAuthRegister.setOnClickListener(View.OnClickListener {
 
@@ -60,16 +56,14 @@ class LoginActivity : AppCompatActivity() {
         })
 
         binding.authButton.setOnClickListener(View.OnClickListener {
-
             //      проверяем интернет-соединение
-            //НЕ ПРОТЕСТИЛ!!
             AsyncTasks.InternetCheck {
-                if(!it) {
+                if (!it) {
                     Snackbar.make(findViewById(R.id.emailEditText), R.string.error_network_connection, Snackbar.LENGTH_SHORT)
-                        .show()
+                            .show()
                     return@InternetCheck
+                }
             }
-        }
 
             val emailUser = binding.emailEditText.text.toString().trim()
             val passwordUser = binding.passwordEditText.text.toString().trim()
@@ -96,15 +90,11 @@ class LoginActivity : AppCompatActivity() {
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
                         // Sign in success, update UI with the signed-in user's information
-                        Log.d("LOGIN", "createUserWithEmail:success")
                         val user = auth.currentUser
-
-                        Log.d("Load", "" + user?.uid.toString())
                         createUser(user, emailUser)
                         (startActivity(Intent(this, ListProductActivity::class.java)))
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("LOGIN", "createUserWithEmail:failure", task.exception)
                         Toast.makeText(baseContext, R.string.create_user_error,
                                 Toast.LENGTH_SHORT).show()
                     }
@@ -116,13 +106,11 @@ class LoginActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(emailUser, passwordUser)
                 .addOnCompleteListener(this) { task ->
                     if (task.isSuccessful) {
-//                        val user = auth.currentUser
                         (startActivity(Intent(this, ListProductActivity::class.java)))
                     } else {
                         // If sign in fails, display a message to the user.
                         Toast.makeText(baseContext, "Email и пароль не совпадают",
                                 Toast.LENGTH_SHORT).show()
-                        //                        updateUI(null)
                     }
                 }
     }
@@ -189,5 +177,6 @@ class LoginActivity : AppCompatActivity() {
         myRef.child(user?.uid.toString()).child("email").setValue(emailUser)
         myRef.child(user?.uid.toString()).child("id").setValue(user?.uid.toString())
     }
+
 }
 
